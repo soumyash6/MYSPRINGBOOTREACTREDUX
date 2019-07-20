@@ -8,6 +8,8 @@ public class PpmtoolApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PpmtoolApplication.class, args);
+
+        System.out.println("spring boot running");
     }
 
 }
