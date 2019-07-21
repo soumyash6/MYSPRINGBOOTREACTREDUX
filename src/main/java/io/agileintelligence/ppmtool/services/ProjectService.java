@@ -5,16 +5,19 @@
  */
 package io.agileintelligence.ppmtool.services;
 
+import io.agileintelligence.ppmtool.Exception.ProjectidException;
 import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author SOUMYA SAHOO
  */
 @Service
+@Transactional
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
@@ -25,8 +28,13 @@ public class ProjectService {
     }
 
     public Project saveOrUpdateProject(Project project) {
-
-        return projectRepository.save(project);
+        project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+        try {
+             return projectRepository.save(project);
+        } catch (Exception e) {
+            throw  new ProjectidException("Project id :"+project.getProjectIdentifier().toUpperCase()+"already exits");
+        }
+      
     }
 
 }

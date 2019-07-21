@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.util.Date;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 
 @Setter
 @Getter
@@ -21,12 +22,15 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotBlank(message = "Project name cannt be blank")
+    @Length(max = 10)
     private String projectName;
     @NotBlank(message = "ProjectIdentifier name cannt be blank")
     @Size(min = 4, max = 5, message = " please use 4 to 5 character")
-    @Column(updatable = false, unique = true)
+    @Column(unique = true, updatable = false)
+    @Length(max = 10)
     private String projectIdentifier;
     @NotBlank(message = "Project description is required")
+    @Length(max = 20)
     private String description;
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date startDate;
