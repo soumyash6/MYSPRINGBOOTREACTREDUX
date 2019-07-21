@@ -1,100 +1,42 @@
 package io.agileintelligence.ppmtool.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Date;
-
+@Setter
+@Getter
+@NoArgsConstructor
 @Entity
+@Table(name = "project")
 public class Project {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   private String projectName;
-  private String project_Identifier;
-  private  String description;
-  private Date start_date;
-    private Date end_date;
+  private String projectIdentifier;
+  private String description;
+  private Date startDate;
+  private Date endDate;
 
-  private Date created_At;
-  private Date updated_At;
+  private Date createdAt;
+  private Date updatedAt;
 
-  public Project() {
-
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-  public String getProjectName() {
-    return projectName;
-  }
-
-  public void setProjectName(String projectName) {
-    this.projectName = projectName;
-  }
-
-  public String getProject_Identifier() {
-    return project_Identifier;
-  }
-
-  public void setProject_Identifier(String project_Identifier) {
-    this.project_Identifier = project_Identifier;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public Date getStart_date() {
-    return start_date;
-  }
-
-  public void setStart_date(Date start_date) {
-    this.start_date = start_date;
-  }
-
-  public Date getEnd_date() {
-    return end_date;
-  }
-
-  public void setEnd_date(Date end_date) {
-    this.end_date = end_date;
-  }
-
-  public Date getCreated_At() {
-    return created_At;
-  }
-
-  public void setCreated_At(Date created_At) {
-    this.created_At = created_At;
-  }
-
-  public Date getUpdated_At() {
-    return updated_At;
-  }
-
-  public void setUpdated_At(Date updated_At) {
-    this.updated_At = updated_At;
-  }
 
   @PrePersist
   protected void onCreate()
   {
-    this.created_At=new Date();
+    this.createdAt=new Date();
 
 
   }
   @PreUpdate
   protected void onUpdate()
   {
-    this.updated_At=new Date();
+    this.updatedAt=new Date();
   }
+
+
 }
