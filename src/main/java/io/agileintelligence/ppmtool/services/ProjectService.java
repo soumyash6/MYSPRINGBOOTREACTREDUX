@@ -8,6 +8,7 @@ package io.agileintelligence.ppmtool.services;
 import io.agileintelligence.ppmtool.Exception.ProjectidException;
 import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.repositories.ProjectRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,10 +43,14 @@ public class ProjectService {
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
 
         if (project == null) {
-            throw new ProjectidException("Project "+projectId+" doesn't exits");
+            throw new ProjectidException("Project " + projectId + " doesn't exits");
         }
         return project;
 
+    }
+
+    public List<Project> findAllProject() {
+        return projectRepository.findAll();
     }
 
 }

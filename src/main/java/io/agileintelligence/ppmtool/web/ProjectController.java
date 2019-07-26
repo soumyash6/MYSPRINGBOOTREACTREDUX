@@ -10,6 +10,7 @@ import io.agileintelligence.ppmtool.services.MapValidationErrorService;
 import io.agileintelligence.ppmtool.services.ProjectService;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,5 +57,10 @@ public class ProjectController {
     public ResponseEntity<?> getProjectById(@PathVariable String projectId) {
         Project project = projectService.findByProjectIdentifier(projectId);
         return new ResponseEntity<Project>(project, HttpStatus.OK);
+    }
+
+    @GetMapping("/All")
+    public List<Project> getAllProject() {
+        return projectService.findAllProject();
     }
 }

@@ -6,6 +6,7 @@
 package io.agileintelligence.ppmtool.repositories;
 
 import io.agileintelligence.ppmtool.domain.Project;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -14,6 +15,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 @org.springframework.stereotype.Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-    
-Project findByProjectIdentifier(String PrjectId);
+
+    Project findByProjectIdentifier(String PrjectId);
+
+    @Override
+    public List<Project> findAll();
+
 }
