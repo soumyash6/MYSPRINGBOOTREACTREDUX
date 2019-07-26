@@ -16,7 +16,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 @org.springframework.stereotype.Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
-    Project findByProjectIdentifier(String PrjectId);
+    Project findByProjectIdentifier(String prjectId);
 
     @Override
     public List<Project> findAll();
