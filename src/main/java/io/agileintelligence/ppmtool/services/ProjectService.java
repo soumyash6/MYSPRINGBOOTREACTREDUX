@@ -30,11 +30,22 @@ public class ProjectService {
     public Project saveOrUpdateProject(Project project) {
         project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
         try {
-             return projectRepository.save(project);
+            return projectRepository.save(project);
         } catch (Exception e) {
-            throw  new ProjectidException("Project id :"+project.getProjectIdentifier().toUpperCase()+"already exits");
+            throw new ProjectidException("Project id :" + project.getProjectIdentifier().toUpperCase() + "already exits");
         }
-      
+
+    }
+
+    public Project findByProjectIdentifier(String projectId) {
+
+        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
+
+        if (project == null) {
+            throw new ProjectidException("Project "+projectId+" doesn't exits");
+        }
+        return project;
+
     }
 
 }
