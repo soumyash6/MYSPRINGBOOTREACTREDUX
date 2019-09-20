@@ -5,21 +5,16 @@
  */
 package io.agileintelligence.ppmtool.Exception;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  *
  * @author SOUMYA SAHOO
  */
-@Setter
-@Getter
-public class ProjectidResponceError {
-     
-    String projectIdentifier;
+public class ProjectNotFoundException extends RuntimeException{
 
-    public ProjectidResponceError(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
+    public ProjectNotFoundException(String message) {
+        super(message);
     }
 
+ 
+    
 }

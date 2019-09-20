@@ -14,12 +14,10 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class ProjectidResponceError {
-     
-    String projectIdentifier;
+public class ProjectnotFoundExceptionResponse {
 
-    public ProjectidResponceError(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
+    public ProjectnotFoundExceptionResponse(String projectNotFound) {
+        this.projectNotFound = projectNotFound;
     }
-
+     String projectNotFound;
 }
