@@ -6,9 +6,12 @@
 package io.agileintelligence.ppmtool.services;
 
 import io.agileintelligence.ppmtool.Exception.ProjectNotFoundException;
+import io.agileintelligence.ppmtool.Exception.ProjectidException;
 import io.agileintelligence.ppmtool.domain.Backlog;
+import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
 import io.agileintelligence.ppmtool.repositories.Backlogrepositoryinterface;
+import io.agileintelligence.ppmtool.repositories.ProjectRepository;
 import io.agileintelligence.ppmtool.repositories.ProjectTaskRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +23,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectTaskService {
 
-    @Autowired
-    private Backlogrepositoryinterface blr;
+    private final ProjectService ps;
+    private final ProjectRepository psr;
 
-    @Autowired
-    private ProjectTaskRepositoryInterface ptri;
+    private final Backlogrepositoryinterface blr;
+
+    private final ProjectTaskRepositoryInterface ptri;
+
+    public ProjectTaskService(ProjectService ps, ProjectRepository psr, Backlogrepositoryinterface blr, ProjectTaskRepositoryInterface ptri) {
+        this.ps = ps;
+        this.psr = psr;
+        this.blr = blr;
+        this.ptri = ptri;
+    }
 
     public ProjectTask addProjectTask(String projectIdentifier, ProjectTask pt) {
         try {
@@ -56,6 +67,24 @@ public class ProjectTaskService {
     }
 
     public Iterable<ProjectTask> findbacklogById(String id) {
+        Project p = ps.findByProjectIdentifier(id);
+        if (p == null) {
+            throw new ProjectNotFoundException("Project not found '" + id + "' for this Id");
+        }
         return ptri.findByprojectIdentifierOrderByPriority(id);
+    }
+
+    public ProjectTask findPtbyProjectsequence(String projectSequence, String backlog_id) {
+        Project p = psr.findByProjectIdentifier(backlog_id);
+        if (p == null) {
+            throw new ProjectNotFoundException("With this id '" + backlog_id + "' project Not Found");
+        }
+
+        ProjectTask projectTask = ptri.findByProjectSequenceAndBacklog_projectIdentifier(projectSequence,backlog_id);
+            if (projectTask == null) {
+            throw new ProjectNotFoundException("With this id '" + projectSequence + "' projectTask Not Found");
+        }
+
+        return projectTask;
     }
 }

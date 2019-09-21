@@ -5,8 +5,12 @@
  */
 package io.agileintelligence.ppmtool.web;
 
+import io.agileintelligence.ppmtool.Exception.ProjectNotFoundException;
+import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
+import io.agileintelligence.ppmtool.repositories.ProjectTaskRepositoryInterface;
 import io.agileintelligence.ppmtool.services.MapValidationErrorService;
+import io.agileintelligence.ppmtool.services.ProjectService;
 import io.agileintelligence.ppmtool.services.ProjectTaskService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +36,14 @@ public class BacklogProjectTaskController {
 
     private final MapValidationErrorService errorHandel;
     private final ProjectTaskService projectservice;
+    private final ProjectTaskRepositoryInterface ptTask;
 
     @Autowired
-    public BacklogProjectTaskController(ProjectTaskService projectservice, MapValidationErrorService errorHandel) {
+    public BacklogProjectTaskController(ProjectTaskService projectservice, MapValidationErrorService errorHandel, ProjectTaskRepositoryInterface ptTask) {
 
         this.errorHandel = errorHandel;
         this.projectservice = projectservice;
+        this.ptTask = ptTask;
     }
 
     @PostMapping("/{backlog_id}")
@@ -56,6 +62,13 @@ public class BacklogProjectTaskController {
     public Iterable<ProjectTask> getProjectBacklog(@PathVariable String backlog_id) {
 
         return projectservice.findbacklogById(backlog_id);
+
+    }
+
+    @GetMapping("/{backlog_id}/{project_Seq}")
+    public ProjectTask getProjectTask(@PathVariable String backlog_id, @PathVariable String project_Seq) {
+
+        return projectservice.findPtbyProjectsequence(project_Seq,backlog_id);
 
     }
 }
