@@ -6,14 +6,12 @@
 package io.agileintelligence.ppmtool.services;
 
 import io.agileintelligence.ppmtool.Exception.ProjectNotFoundException;
-import io.agileintelligence.ppmtool.Exception.ProjectidException;
 import io.agileintelligence.ppmtool.domain.Backlog;
 import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
 import io.agileintelligence.ppmtool.repositories.Backlogrepositoryinterface;
 import io.agileintelligence.ppmtool.repositories.ProjectRepository;
 import io.agileintelligence.ppmtool.repositories.ProjectTaskRepositoryInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
