@@ -19,4 +19,5 @@ public interface ProjectTaskRepositoryInterface extends CrudRepository<ProjectTa
     List<ProjectTask> findByprojectIdentifierOrderByPriority(String id);
 
     ProjectTask findByProjectSequenceAndBacklog_projectIdentifier(String id,String backLogId);
+    ProjectTask findByProjectSequence(String id);
 }

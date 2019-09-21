@@ -78,11 +78,67 @@ public class ProjectTaskService {
             throw new ProjectNotFoundException("With this id '" + backlog_id + "' project Not Found");
         }
 
-        ProjectTask projectTask = ptri.findByProjectSequenceAndBacklog_projectIdentifier(projectSequence,backlog_id);
-            if (projectTask == null) {
+        Backlog backlog = blr.findByprojectIdentifier(backlog_id);
+        if (backlog == null) {
+            throw new ProjectNotFoundException("With this id '" + projectSequence + "' backlog Not Found");
+        }
+        ProjectTask projectTaskwithsequence = ptri.findByProjectSequence(projectSequence);
+        if (projectTaskwithsequence == null) {
+            throw new ProjectNotFoundException("With this id '" + projectSequence + "' projectTask Not Found");
+        }
+        if (!projectTaskwithsequence.getProjectIdentifier().equals(backlog_id)) {
+            throw new ProjectNotFoundException("Project is Not belon To" + backlog_id + " backlog id");
+        }
+        ProjectTask projectTask = ptri.findByProjectSequenceAndBacklog_projectIdentifier(projectSequence, backlog_id);
+        if (projectTask == null) {
             throw new ProjectNotFoundException("With this id '" + projectSequence + "' projectTask Not Found");
         }
 
         return projectTask;
+    }
+
+    public ProjectTask updateProjectTask(ProjectTask task, String backloId, String ptseq) {
+        Project p = psr.findByProjectIdentifier(backloId);
+        if (p == null) {
+            throw new ProjectNotFoundException("With this id '" + backloId + "' project Not Found");
+        }
+        ProjectTask pt = ptri.findByProjectSequence(ptseq);
+        if (pt == null) {
+            throw new ProjectNotFoundException("With this id '" + ptseq + "' projectTask Not Found");
+        }
+        if (!pt.getProjectIdentifier().equals(backloId)) {
+            throw new ProjectNotFoundException("Project is Not belon To" + backloId + " backlog id");
+        }
+        ProjectTask projectTask = ptri.findByProjectSequenceAndBacklog_projectIdentifier(ptseq, backloId);
+        if (projectTask == null) {
+            throw new ProjectNotFoundException("With this id '" + ptseq + "' projectTask Not Found");
+        }
+
+        pt = task;
+
+        return ptri.save(pt);
+    }
+
+    public String deleteprojecttask(String backloId, String ptseq) {
+        String dataReturn = "";
+        Project p = psr.findByProjectIdentifier(backloId);
+        if (p == null) {
+            throw new ProjectNotFoundException("With this id '" + backloId + "' project Not Found");
+        }
+        ProjectTask pt = ptri.findByProjectSequence(ptseq);
+        if (pt == null) {
+            throw new ProjectNotFoundException("With this id '" + ptseq + "' projectTask Not Found");
+        }
+        if (!pt.getProjectIdentifier().equals(backloId)) {
+            throw new ProjectNotFoundException("Project is Not belon To" + backloId + " backlog id");
+        }
+        ProjectTask projectTask = ptri.findByProjectSequenceAndBacklog_projectIdentifier(ptseq, backloId);
+        if (projectTask == null) {
+            throw new ProjectNotFoundException("With this id '" + ptseq + "' projectTask Not Found");
+        }
+
+        ptri.delete(projectTask);
+        dataReturn = "project task Delete whose ptseq is" + ptseq;
+        return dataReturn;
     }
 }

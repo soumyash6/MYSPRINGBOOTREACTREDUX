@@ -18,7 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,7 +70,24 @@ public class BacklogProjectTaskController {
     @GetMapping("/{backlog_id}/{project_Seq}")
     public ProjectTask getProjectTask(@PathVariable String backlog_id, @PathVariable String project_Seq) {
 
-        return projectservice.findPtbyProjectsequence(project_Seq,backlog_id);
+        return projectservice.findPtbyProjectsequence(project_Seq, backlog_id);
+
+    }
+
+    @PatchMapping("/{backlog_id}/{project_Seq}")
+    public ResponseEntity<?> updateProjectTask(@Valid @RequestBody ProjectTask projectTask, BindingResult bindingResult, @PathVariable String backlog_id, @PathVariable String project_Seq) {
+        ResponseEntity<?> errorMap = errorHandel.throughError(bindingResult);
+        if (errorMap != null) {
+            return errorMap;
+        }
+        return new ResponseEntity<ProjectTask>(projectservice.updateProjectTask(projectTask, backlog_id, project_Seq), HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("/{backlog_id}/{project_Seq}")
+    public ResponseEntity<?> deleteProjecttask(@PathVariable String backlog_id, @PathVariable String project_Seq) {
+
+        return new ResponseEntity<String>(projectservice.deleteprojecttask(backlog_id, project_Seq), HttpStatus.OK);
 
     }
 }
