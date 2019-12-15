@@ -16,10 +16,10 @@ import lombok.Setter;
 @Getter
 public class ProjectidResponceError {
      
-    String projectIdentifier;
+    String projectnotFound;
 
     public ProjectidResponceError(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
+        this.projectnotFound = projectIdentifier;
     }
 
 }

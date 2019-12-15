@@ -5,12 +5,9 @@
  */
 package io.agileintelligence.ppmtool.web;
 
-import io.agileintelligence.ppmtool.Exception.ProjectNotFoundException;
-import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
 import io.agileintelligence.ppmtool.repositories.ProjectTaskRepositoryInterface;
 import io.agileintelligence.ppmtool.services.MapValidationErrorService;
-import io.agileintelligence.ppmtool.services.ProjectService;
 import io.agileintelligence.ppmtool.services.ProjectTaskService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
