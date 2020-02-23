@@ -76,8 +76,8 @@ public class ProjectTaskService {
 		return ptri.findByprojectIdentifierOrderByPriority(id);
 	}
 
-	public ProjectTask findPtbyProjectsequence(String projectSequence, String backlog_id) {
-		Project p = psr.findByProjectIdentifier(backlog_id);
+	public ProjectTask findPtbyProjectsequence(String projectSequence, String backlog_id, String principalUsrname) {
+		Project p = ps.findByProjectIdentifier(backlog_id, principalUsrname);
 		if (p == null) {
 			throw new ProjectNotFoundException("With this id '" + backlog_id + "' project Not Found");
 		}
@@ -101,8 +101,9 @@ public class ProjectTaskService {
 		return projectTask;
 	}
 
-	public ProjectTask updateProjectTask(ProjectTask task, String backloId, String ptseq) {
-		Project p = psr.findByProjectIdentifier(backloId);
+	public ProjectTask updateProjectTask(ProjectTask task, String backloId, String ptseq, String usenamePrincipal) {
+		// Project p = psr.findByProjectIdentifier(backloId);
+		Project p = ps.findByProjectIdentifier(backloId, usenamePrincipal);
 		if (p == null) {
 			throw new ProjectNotFoundException("With this id '" + backloId + "' project Not Found");
 		}
@@ -123,9 +124,10 @@ public class ProjectTaskService {
 		return ptri.save(pt);
 	}
 
-	public String deleteprojecttask(String backloId, String ptseq) {
+	public String deleteprojecttask(String backloId, String ptseq, String usenamePrincipal) {
 		String dataReturn = "";
-		Project p = psr.findByProjectIdentifier(backloId);
+		// Project p = psr.findByProjectIdentifier(backloId);
+		Project p = ps.findByProjectIdentifier(backloId, usenamePrincipal);
 		if (p == null) {
 			throw new ProjectNotFoundException("With this id '" + backloId + "' project Not Found");
 		}
