@@ -124,7 +124,7 @@ public class ProjectTaskService {
 		return ptri.save(pt);
 	}
 
-	public String deleteprojecttask(String backloId, String ptseq, String usenamePrincipal) {
+	public String deleteprojecttask(String backloId, String ptseq, String usenamePrincipal ) {
 		String dataReturn = "";
 		// Project p = psr.findByProjectIdentifier(backloId);
 		Project p = ps.findByProjectIdentifier(backloId, usenamePrincipal);
