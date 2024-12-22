@@ -11,7 +11,8 @@ import io.agileintelligence.ppmtool.services.ProjectService;
 
 import java.security.Principal;
 import java.util.List;
-import javax.validation.Valid;
+
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class ProjectController {
 
 	@PostMapping
 	public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result,
-			Principal principal) {
+											  Principal principal) {
 
 		ResponseEntity<?> projectError = errorHandel.throughError(result);
 		if (projectError != null) {

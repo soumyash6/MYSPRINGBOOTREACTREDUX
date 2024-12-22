@@ -6,19 +6,20 @@
 package io.agileintelligence.ppmtool.domain;
 
 /**
- *
  * @author SOUMYA SAHOO
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+
 import java.util.Date;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 public class ProjectTask {
@@ -33,19 +34,19 @@ public class ProjectTask {
     private String acceptanceCriteria;
     private String status;
     private Integer priority;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(TemporalType.DATE)
     private Date dueDate;
     //ManyToOne with Backlog
-    @ManyToOne( fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
     @JsonIgnore
     private Backlog backlog;
 
     @Column(updatable = false)
     private String projectIdentifier;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(TemporalType.DATE)
     private Date create_At;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(TemporalType.DATE)
     private Date update_At;
 
     @PrePersist
