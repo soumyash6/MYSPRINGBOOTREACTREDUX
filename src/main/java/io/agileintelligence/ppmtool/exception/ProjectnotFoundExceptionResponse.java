@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package io.agileintelligence.ppmtool.Exception;
+package io.agileintelligence.ppmtool.exception;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- *
  * @author SOUMYA SAHOO
  */
 @Setter
@@ -19,5 +18,6 @@ public class ProjectnotFoundExceptionResponse {
     public ProjectnotFoundExceptionResponse(String projectNotFound) {
         this.projectNotFound = projectNotFound;
     }
-     String projectNotFound;
+
+    String projectNotFound;
 }

@@ -6,7 +6,7 @@ public class JWTLoginSucessReponse {
 
     public JWTLoginSucessReponse(boolean success, String token) {
         this.success = success;
-        this.token = token; 
+        this.token = token;
     }
 
     public boolean isSuccess() {

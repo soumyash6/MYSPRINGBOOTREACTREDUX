@@ -6,18 +6,20 @@
 package io.agileintelligence.ppmtool.repositories;
 
 /**
- *
  * @author SOUMYA SAHOO
  */
+
 import io.agileintelligence.ppmtool.domain.ProjectTask;
-import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ProjectTaskRepositoryInterface extends CrudRepository<ProjectTask, Long> {
     List<ProjectTask> findByprojectIdentifierOrderByPriority(String id);
 
-    ProjectTask findByProjectSequenceAndBacklog_projectIdentifier(String id,String backLogId);
+    ProjectTask findByProjectSequenceAndBacklog_projectIdentifier(String id, String backLogId);
+
     ProjectTask findByProjectSequence(String id);
 }
