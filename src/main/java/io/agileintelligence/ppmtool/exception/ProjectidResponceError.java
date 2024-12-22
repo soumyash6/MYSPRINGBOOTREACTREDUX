@@ -3,19 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package io.agileintelligence.ppmtool.Exception;
+package io.agileintelligence.ppmtool.exception;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- *
  * @author SOUMYA SAHOO
  */
 @Setter
 @Getter
 public class ProjectidResponceError {
-     
+
     String projectnotFound;
 
     public ProjectidResponceError(String projectIdentifier) {

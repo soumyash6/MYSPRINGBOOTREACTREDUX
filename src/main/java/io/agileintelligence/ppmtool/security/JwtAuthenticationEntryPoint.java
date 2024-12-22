@@ -1,9 +1,7 @@
 package io.agileintelligence.ppmtool.security;
 
 import com.google.gson.Gson;
-
-import io.agileintelligence.ppmtool.Exception.InvalidLoginResponse;
-
+import io.agileintelligence.ppmtool.exception.InvalidLoginResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,16 +14,16 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-	@Override
-	public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-						 AuthenticationException e) throws IOException, ServletException {
+    @Override
+    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+                         AuthenticationException e) throws IOException, ServletException {
 
-		InvalidLoginResponse loginResponse = new InvalidLoginResponse();
-		String jsonLoginResponse = new Gson().toJson(loginResponse);
+        InvalidLoginResponse loginResponse = new InvalidLoginResponse();
+        String jsonLoginResponse = new Gson().toJson(loginResponse);
 
-		httpServletResponse.setContentType("application/json");
-		httpServletResponse.setStatus(401);
-		httpServletResponse.getWriter().print(jsonLoginResponse);
+        httpServletResponse.setContentType("application/json");
+        httpServletResponse.setStatus(401);
+        httpServletResponse.getWriter().print(jsonLoginResponse);
 
-	}
+    }
 }
