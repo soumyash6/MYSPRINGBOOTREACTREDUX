@@ -1,5 +1,6 @@
 package io.agileintelligence.ppmtool.security;
 
+import io.agileintelligence.ppmtool.services.CustomerUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,84 +9,85 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import io.agileintelligence.ppmtool.services.CustomerUserDetailService;
-
-import static io.agileintelligence.ppmtool.security.SecurityConstant.SIGN_UP_URLS;
-
 import java.util.Arrays;
 
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
-
 import static io.agileintelligence.ppmtool.security.SecurityConstant.H2_URL;
-import org.springframework.security.config.BeanIds;
+import static io.agileintelligence.ppmtool.security.SecurityConstant.SIGN_UP_URLS;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
-	@Autowired
-	private JwtAuthenticationEntryPoint unauthorizedHandler;
+    @Autowired
+    private JwtAuthenticationEntryPoint unauthorizedHandler;
 
-	@Autowired
-	private CustomerUserDetailService customUserDetailsService;
+    @Autowired
+    private CustomerUserDetailService customUserDetailsService;
 
-	@Bean
-	public JwtFilterClassForToken filterToken() {
-		return new JwtFilterClassForToken();
-	}
+    @Autowired
+    private JwtFilterClassForToken jwtFilter;
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Bean
+    public JwtFilterClassForToken filterToken() {
+        return new JwtFilterClassForToken();
+    }
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(customUserDetailsService)
-				.passwordEncoder(bCryptPasswordEncoder);
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Override
-	@Bean(BeanIds.AUTHENTICATION_MANAGER)
-	protected AuthenticationManager authenticationManager() throws Exception {
-		return super.authenticationManager();
-	}
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+        return authenticationManagerBuilder.build();
+    }
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-//		request -> new CorsConfiguration().applyPermitDefaultValues()
-		http.cors().configurationSource(configurationSource()).and().csrf().disable().exceptionHandling()
-				.authenticationEntryPoint(unauthorizedHandler).and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().headers().frameOptions().sameOrigin() // To
-																													// enable
-																													// H2
-																													// Database
-				.and().authorizeRequests()
-				.antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html",
-						"/**/*.css", "/**/*.js")
-				.permitAll().antMatchers(SIGN_UP_URLS).permitAll().antMatchers(H2_URL).permitAll().anyRequest()
-				.authenticated();
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Configuring HTTP security with the latest Spring Security 6.x approach
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin())) // To allow access to H2 database
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html",
+                                "/**/*.css", "/**/*.js")
+                        .permitAll()
+                        .requestMatchers(SIGN_UP_URLS)
+                        .permitAll()
+                        .requestMatchers(H2_URL)
+                        .permitAll()
+                        .anyRequest().authenticated()
+                );
 
-		http.addFilterBefore(filterToken(), UsernamePasswordAuthenticationFilter.class);
-	}
+        // Adding JWT filter before UsernamePasswordAuthenticationFilter
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-	@Bean
-	CorsConfigurationSource configurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
-		UrlBasedCorsConfigurationSource basedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-		basedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
+        // Replacing deprecated exceptionHandling() with custom AuthenticationEntryPoint
+        http.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler));
 
-		return basedCorsConfigurationSource;
+        return http.build();  // Returns the SecurityFilterChain instance
+    }
 
-	}
-
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }

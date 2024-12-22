@@ -1,121 +1,118 @@
 package io.agileintelligence.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Temporal;
-import javax.persistence.Transient;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity
-@Setter
-@Getter
+@Data
 public class User implements UserDetails {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "my_user_id")
-	private Long myUserId;
-	@Email(message = "User name shouls be email")
-	@NotBlank(message = "Username should not be blank")
-	@Column(unique = true)
-	private String username;
-	@NotBlank(message = "fullName should not be blank")
-	private String fullName;
-	@NotBlank(message = "password should not be blank")
-	private String password;
-	@Transient
-//	@NotBlank(message = "confirmPassword should not be blank")
-	private String confirmPassword;
-	@Temporal(javax.persistence.TemporalType.DATE)
-	private Date create_At;
-	@Temporal(javax.persistence.TemporalType.DATE)
-	private Date update_At;
+    private static final long serialVersionUID = 1L;
 
-	// OneToMany with Project
-	@OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
-	private List<Project> projects = new ArrayList<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "my_user_id")
+    private Long myUserId;
 
-	@PrePersist
-	protected void onCreate() {
-		this.create_At = new Date();
-	}
+    @Email(message = "Username should be an email")
+    @NotBlank(message = "Username should not be blank")
+    @Column(unique = true)
+    private String username;
 
-	@PreUpdate
-	protected void onUpdate() {
-		this.update_At = new Date();
-	}
+    @NotBlank(message = "Full name should not be blank")
+    private String fullName;
 
-	// one to many projects
+    @NotBlank(message = "Password should not be blank")
+    private String password;
 
-	public User() {
-		super();
-	}
+    @Transient
+    private String confirmPassword;
 
-	@Override
-	@JsonIgnore
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Temporal(TemporalType.DATE)
+    private Date create_At;
 
-	@Override
-	@JsonIgnore
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    @Temporal(TemporalType.DATE)
+    private Date update_At;
 
-	@Override
-	@JsonIgnore
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    // OneToMany with Project
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    private List<Project> projects = new ArrayList<>();
 
-	@Override
-	@JsonIgnore
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    @PrePersist
+    protected void onCreate() {
+        this.create_At = new Date();
+    }
 
-	@Override
-	@JsonIgnore
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    @PreUpdate
+    protected void onUpdate() {
+        this.update_At = new Date();
+    }
 
-	@Override
-	public String toString() {
-		return "User [id=" + myUserId + ", username=" + username + ", fullName=" + fullName + ", password=" + password
-				+ ", confirmPassword=" + confirmPassword + ", create_At=" + create_At + ", update_At=" + update_At
-				+ "]";
-	}
+    public User() {
+        super();
+    }
 
+    // Implement getUsername method required by UserDetails
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getPassword() {
+        return this.password;
+    }
+
+
+    @Override
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN")); // Example of an admin role
+        return authorities;
+    }
+
+    // Implement account status methods
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return true; // Update based on your business logic
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return true; // Update based on your business logic
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return true; // Update based on your business logic
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() {
+        return true; // Update based on your business logic, e.g., user activation
+    }
+
+    @Override
+    public String toString() {
+        return "User [id=" + myUserId + ", username=" + username + ", fullName=" + fullName + ", password=" + password
+                + ", confirmPassword=" + confirmPassword + ", create_At=" + create_At + ", update_At=" + update_At
+                + "]";
+    }
 }

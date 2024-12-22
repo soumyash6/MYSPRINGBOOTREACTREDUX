@@ -12,11 +12,12 @@ import io.agileintelligence.ppmtool.services.ProjectTaskService;
 
 import java.security.Principal;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,8 +51,8 @@ public class BacklogProjectTaskController {
 	}
 
 	@PostMapping("/{backlog_id}")
-	public ResponseEntity<?> addProjectTask(@Valid @RequestBody ProjectTask projectTask, BindingResult bindingResult,
-			@PathVariable String backlog_id, Principal principal) {
+	public ResponseEntity<?> addProjectTask(@Validated @RequestBody ProjectTask projectTask, BindingResult bindingResult,
+											@PathVariable String backlog_id, Principal principal) {
 
 		ResponseEntity<?> errorMap = errorHandel.throughError(bindingResult);
 		if (errorMap != null) {
@@ -78,8 +79,8 @@ public class BacklogProjectTaskController {
 	}
 
 	@PatchMapping("/{backlog_id}/{project_Seq}")
-	public ResponseEntity<?> updateProjectTask(@Valid @RequestBody ProjectTask projectTask, BindingResult bindingResult,
-			@PathVariable String backlog_id, @PathVariable String project_Seq, Principal principal) {
+	public ResponseEntity<?> updateProjectTask(@Validated @RequestBody ProjectTask projectTask, BindingResult bindingResult,
+											   @PathVariable String backlog_id, @PathVariable String project_Seq, Principal principal) {
 		ResponseEntity<?> errorMap = errorHandel.throughError(bindingResult);
 		if (errorMap != null) {
 			return errorMap;
