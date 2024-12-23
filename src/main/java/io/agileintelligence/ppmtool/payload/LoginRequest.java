@@ -1,28 +1,22 @@
 package io.agileintelligence.ppmtool.payload;
 
-
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
+@Data
 public class LoginRequest {
 
     @NotBlank(message = "Username cannot be blank")
     private String username;
+
     @NotBlank(message = "Password cannot be blank")
     private String password;
 
-    public String getUsername() {
-        return username;
+    public LoginRequest() {
     }
 
-    public void setUsername(String username) {
+    public LoginRequest(String username, String password) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
     }
 }

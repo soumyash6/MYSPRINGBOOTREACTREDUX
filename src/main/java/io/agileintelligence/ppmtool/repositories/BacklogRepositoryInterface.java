@@ -14,8 +14,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface Backlogrepositoryinterface extends CrudRepository<Backlog, Long> {
-
-    Backlog findByprojectIdentifier(String identifier);
-
+public interface BacklogRepositoryInterface extends CrudRepository<Backlog, Long> {
+    Backlog findByProjectIdentifier(String identifier);
 }

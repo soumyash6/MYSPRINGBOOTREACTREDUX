@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 @Service
 public class MapValidationErrorService {
 
-    public ResponseEntity<?> throughError(BindingResult result) {
+    public ResponseEntity<?> mapValidationService(BindingResult result) {
         HashMap<String, String> errorMap = new LinkedHashMap<String, String>();
         if (result.hasErrors()) {
             for (FieldError errorInProject : result.getFieldErrors()) {

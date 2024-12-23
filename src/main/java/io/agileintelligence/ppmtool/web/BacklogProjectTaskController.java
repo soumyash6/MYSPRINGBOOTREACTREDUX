@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package io.agileintelligence.ppmtool.web;
 
 import io.agileintelligence.ppmtool.domain.ProjectTask;
@@ -17,86 +12,66 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
- *
- * @author SOUMYA SAHOO
+ * BacklogProjectTaskController handles the CRUD operations for Project Tasks in the backlog.
  */
 @RestController
 @RequestMapping("/api/backlog")
 @CrossOrigin
 public class BacklogProjectTaskController {
 
-	private final MapValidationErrorService errorHandel;
-	private final ProjectTaskService projectservice;
-	private final ProjectTaskRepositoryInterface ptTask;
+	private final MapValidationErrorService mapValidationErrorService;
+	private final ProjectTaskService projectTaskService;
+	private final ProjectTaskRepositoryInterface projectTaskRepository;
 
 	@Autowired
-	public BacklogProjectTaskController(ProjectTaskService projectservice, MapValidationErrorService errorHandel,
-			ProjectTaskRepositoryInterface ptTask) {
-
-		this.errorHandel = errorHandel;
-		this.projectservice = projectservice;
-		this.ptTask = ptTask;
+	public BacklogProjectTaskController(ProjectTaskService projectTaskService, MapValidationErrorService mapValidationErrorService,
+										ProjectTaskRepositoryInterface projectTaskRepository) {
+		this.mapValidationErrorService = mapValidationErrorService;
+		this.projectTaskService = projectTaskService;
+		this.projectTaskRepository = projectTaskRepository;
 	}
 
 	@PostMapping("/{backlog_id}")
-	public ResponseEntity<?> addProjectTask(@Validated @RequestBody ProjectTask projectTask, BindingResult bindingResult,
+	public ResponseEntity<?> addProjectTask(@Valid @RequestBody ProjectTask projectTask, BindingResult bindingResult,
 											@PathVariable String backlog_id, Principal principal) {
-
-		ResponseEntity<?> errorMap = errorHandel.throughError(bindingResult);
+		ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(bindingResult);
 		if (errorMap != null) {
 			return errorMap;
 		}
-		ProjectTask projectTask1 = projectservice.addProjectTask(backlog_id, projectTask, principal.getName());
-		return new ResponseEntity<ProjectTask>(projectTask1, HttpStatus.CREATED);
-
+		ProjectTask newProjectTask = projectTaskService.addProjectTask(backlog_id, projectTask, principal.getName());
+		return new ResponseEntity<>(newProjectTask, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{backlog_id}")
-	public Iterable<ProjectTask> getProjectBacklog(@PathVariable String backlog_id, Principal principalname) {
-
-		return projectservice.findbacklogById(backlog_id, principalname.getName());
-
+	public Iterable<ProjectTask> getProjectBacklog(@PathVariable String backlog_id, Principal principal) {
+		return projectTaskService.findBacklogById(backlog_id, principal.getName());
 	}
 
 	@GetMapping("/{backlog_id}/{project_Seq}")
-	public ProjectTask getProjectTask(@PathVariable String backlog_id, @PathVariable String project_Seq,
-			Principal principal) {
-
-		return projectservice.findPtbyProjectsequence(project_Seq, backlog_id, principal.getName());
-
+	public ResponseEntity<?> getProjectTask(@PathVariable String backlog_id, @PathVariable String project_Seq,
+											Principal principal) {
+		ProjectTask projectTask = projectTaskService.findPTByProjectSequence(project_Seq, backlog_id, principal.getName());
+		return new ResponseEntity<>(projectTask, HttpStatus.OK);
 	}
 
 	@PatchMapping("/{backlog_id}/{project_Seq}")
-	public ResponseEntity<?> updateProjectTask(@Validated @RequestBody ProjectTask projectTask, BindingResult bindingResult,
+	public ResponseEntity<?> updateProjectTask(@Valid @RequestBody ProjectTask projectTask, BindingResult bindingResult,
 											   @PathVariable String backlog_id, @PathVariable String project_Seq, Principal principal) {
-		ResponseEntity<?> errorMap = errorHandel.throughError(bindingResult);
+		ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(bindingResult);
 		if (errorMap != null) {
 			return errorMap;
 		}
-		return new ResponseEntity<ProjectTask>(
-				projectservice.updateProjectTask(projectTask, backlog_id, project_Seq, principal.getName()),
-				HttpStatus.OK);
-
+		ProjectTask updatedProjectTask = projectTaskService.updateProjectTask(projectTask, backlog_id, project_Seq, principal.getName());
+		return new ResponseEntity<>(updatedProjectTask, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{backlog_id}/{project_Seq}")
-	public ResponseEntity<?> deleteProjecttask(@PathVariable String backlog_id, @PathVariable String project_Seq,
-			Principal principal) {
-
-		return new ResponseEntity<String>(
-				projectservice.deleteprojecttask(backlog_id, project_Seq, principal.getName()), HttpStatus.OK);
-
+	public ResponseEntity<?> deleteProjectTask(@PathVariable String backlog_id, @PathVariable String project_Seq,
+											   Principal principal) {
+		projectTaskService.deleteProjectTask(backlog_id, project_Seq, principal.getName());
+		return new ResponseEntity<>("Project Task deleted successfully", HttpStatus.OK);
 	}
 }
