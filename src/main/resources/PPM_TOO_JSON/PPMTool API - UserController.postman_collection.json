@@ -1,0 +1,122 @@
+{
+	"info": {
+		"_postman_id": "742a1746-7cc9-4eed-be96-363b71e50aa4",
+		"name": "PPMTool API - UserController",
+		"description": "Postman collection for UserController endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25337595"
+	},
+	"item": [
+		{
+			"name": "User Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Log the response status\r",
+							"console.log(`Response Status: ${pm.response.code}`);\r",
+							"\r",
+							"// Log the response body\r",
+							"console.log('Response Body:', pm.response.json());\r",
+							"\r",
+							"// Verify if the status code is 200 or 201\r",
+							"pm.test('Status code is 200 or 201', function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"if (pm.response.json().token) {\r",
+							"    var token = pm.response.json().token.split(' ')[1];\r",
+							"    pm.environment.set('token', token);\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{usrname}}\",\n  \"password\": \"1234567@gmail\"\n}"
+				},
+				"url": {
+					"raw": "{{LOCAL_API}}api/users/login",
+					"host": [
+						"{{LOCAL_API}}api"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Log the response status\r",
+							"console.log(`Response Status: ${pm.response.code}`);\r",
+							"\r",
+							"// Log the response body\r",
+							"console.log('Response Body:', pm.response.json());\r",
+							"\r",
+							"// Verify if the status code is 200 or 201\r",
+							"pm.test('Status code is 200 or 201', function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"if (pm.response.json().username) {\r",
+							"    pm.environment.set('usrname', pm.response.json().username);\r",
+							"}\r",
+							"if (pm.response.json().password) {\r",
+							"    pm.environment.set('password', pm.response.json().password);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"liku@gmail.com\",\n  \"password\": \"1234567@gmail\",\n  \"confirmPassword\":\"1234567@gmail\",\n  \"fullName\": \"liku RANJAN SAHU\"\n}"
+				},
+				"url": {
+					"raw": "{{LOCAL_API}}api/users/register",
+					"host": [
+						"{{LOCAL_API}}api"
+					],
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
