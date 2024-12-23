@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "3a4d38e6-c63c-4dbb-95d6-08aa535fc300",
+		"name": "PPMTool API - BacklogProjectTaskController",
+		"description": "Postman collection for BacklogProjectTaskController endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25337595"
+	},
+	"item": [
+		{
+			"name": "Add Project Task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Log the response status\r",
+							"console.log(`Response Status: ${pm.response.code}`);\r",
+							"\r",
+							"// Log the response body\r",
+							"console.log('Response Body:', pm.response.json());\r",
+							"\r",
+							"// Verify if the status code is 200 or 201\r",
+							"pm.test('Status code is 200 or 201', function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"if (pm.response.json().projectSequence) {\r",
+							"    var projectSequence = pm.response.json().projectSequence;\r",
+							"    pm.environment.set('projectseq', projectSequence);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"summary\": \"DTI\",\n  \"acceptanceCriteria\": \"DTI DETAILS\",\n  \"status\": \"PENDING\"\n}"
+				},
+				"url": {
+					"raw": "{{LOCAL_API}}api/backlog/{{projectId}}",
+					"host": [
+						"{{LOCAL_API}}api"
+					],
+					"path": [
+						"backlog",
+						"{{projectId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Project Backlog",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{LOCAL_API}}api/backlog/{{projectId}}",
+					"host": [
+						"{{LOCAL_API}}api"
+					],
+					"path": [
+						"backlog",
+						"{{projectId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Project Task",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{LOCAL_API}}api/backlog/{{projectId}}/{{projectseq}}",
+					"host": [
+						"{{LOCAL_API}}api"
+					],
+					"path": [
+						"backlog",
+						"{{projectId}}",
+						"{{projectseq}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Project Task",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"summary\": \"Updated Task Summary\",\n  \"acceptanceCriteria\": \"Updated Acceptance Criteria\",\n  \"status\": \"Updated Status\"\n}"
+				},
+				"url": {
+					"raw": "{{LOCAL_API}}api/backlog/{{projectId}}/{{projectseq}}",
+					"host": [
+						"{{LOCAL_API}}api"
+					],
+					"path": [
+						"backlog",
+						"{{projectId}}",
+						"{{projectseq}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Project Task",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{LOCAL_API}}api/backlog/{{projectId}}/{{projectseq}}",
+					"host": [
+						"{{LOCAL_API}}api"
+					],
+					"path": [
+						"backlog",
+						"{{projectId}}",
+						"{{projectseq}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

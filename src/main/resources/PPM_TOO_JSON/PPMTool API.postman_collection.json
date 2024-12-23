@@ -1,0 +1,177 @@
+{
+	"info": {
+		"_postman_id": "7d26dc02-602e-4d0d-8a99-b8e8ce482481",
+		"name": "PPMTool API",
+		"description": "Postman collection for PPMTool API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25337595"
+	},
+	"item": [
+		{
+			"name": "Create New Project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Log the response status\r",
+							"console.log(`Response Status: ${pm.response.code}`);\r",
+							"\r",
+							"// Log the response body\r",
+							"console.log('Response Body:', pm.response.json());\r",
+							"\r",
+							"// Verify if the status code is 200 or 201\r",
+							"pm.test('Status code is 200 or 201', function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"if (pm.response.json().projectIdentifier) {\r",
+							"    var projectIdentifier = pm.response.json().projectIdentifier;\r",
+							"    pm.environment.set('projectId', projectIdentifier);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"projectName\": \"TLP-2\",\n  \"projectIdentifier\": \"TLP_M\",\n  \"description\": \"LOAN-CREDIT\"\n}"
+				},
+				"url": {
+					"raw": "{{LOCAL_API}}api/project",
+					"host": [
+						"{{LOCAL_API}}api"
+					],
+					"path": [
+						"project"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Project By ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{LOCAL_API}}api/project/{{projectId}}",
+					"host": [
+						"{{LOCAL_API}}api"
+					],
+					"path": [
+						"project",
+						"{{projectId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Projects",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{LOCAL_API}}api/project/All",
+					"host": [
+						"{{LOCAL_API}}api"
+					],
+					"path": [
+						"project",
+						"All"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Project",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{LOCAL_API}}api/project/{{projectId}}",
+					"host": [
+						"{{LOCAL_API}}api"
+					],
+					"path": [
+						"project",
+						"{{projectId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
