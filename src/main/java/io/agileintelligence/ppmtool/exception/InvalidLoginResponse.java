@@ -1,27 +1,27 @@
 package io.agileintelligence.ppmtool.exception;
 
 public class InvalidLoginResponse {
-    private String username;
-    private String password;
+    private String invalidUsername;
+    private String invalidPassword;
 
     public InvalidLoginResponse() {
-        this.username = "Invalid Username";
-        this.password = "Invalid Password";
+        this.invalidUsername = "Invalid Username";
+        this.invalidPassword = "Invalid Password";
     }
 
-    public String getUsername() {
-        return username;
+    public String getInvalidUsername() {
+        return invalidUsername;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setInvalidUsername(String invalidUsername) {
+        this.invalidUsername = invalidUsername;
     }
 
-    public String getPassword() {
-        return password;
+    public String getInvalidPassword() {
+        return invalidPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setInvalidPassword(String invalidPassword) {
+        this.invalidPassword = invalidPassword;
     }
 }

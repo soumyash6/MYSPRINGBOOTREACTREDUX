@@ -1,6 +1,6 @@
 package io.agileintelligence.ppmtool.services;
 
-import io.agileintelligence.ppmtool.exception.UsernotfoundException;
+import io.agileintelligence.ppmtool.exception.UserNotFoundException;
 import io.agileintelligence.ppmtool.domain.User;
 import io.agileintelligence.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     @Autowired
-    private UserRepository userrepository;
+    private UserRepository userRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -21,12 +21,9 @@ public class UserService {
             newUser.setConfirmPassword("");
             newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
             newUser.setUsername(newUser.getUsername());
-            return userrepository.save(newUser);
+            return userRepository.save(newUser);
         } catch (Exception e) {
-            //e.printStackTrace();
-            System.out.println("catch comming");
-            throw new UsernotfoundException("user" + newUser.getFullName() + "already exits");
+            throw new UserNotFoundException("User " + newUser.getFullName() + " already exists");
         }
-
     }
 }

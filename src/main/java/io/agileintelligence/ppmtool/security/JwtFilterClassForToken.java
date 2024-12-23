@@ -22,22 +22,17 @@ public class JwtFilterClassForToken extends OncePerRequestFilter {
     private JwtTokenProvider tokenProvider;
 
     @Autowired
-    private CustomerUserDetailService custuserservice;
+    private CustomerUserDetailService customerUserDetailService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         try {
-            String request_Token = getToken(request);
-            boolean validateToken = tokenProvider.validateToken(request_Token);
-            System.out.print("validateToken: ");
-            System.out.println(validateToken);
-            if (StringUtils.hasText(request_Token) && validateToken) {
-                String token_id = tokenProvider.getUserIDFrom_token(request_Token);
-                System.out.println("token_id: ");
-                System.out.println(token_id);
-                User user = custuserservice.loadUserById(Long.parseLong(token_id));
+            String requestToken = getToken(request);
+            if (StringUtils.hasText(requestToken) && tokenProvider.validateToken(requestToken)) {
+                String tokenId = tokenProvider.getUserIdFromToken(requestToken);
+                User user = customerUserDetailService.loadUserById(Long.parseLong(tokenId));
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user,
                         null, user.getAuthorities());
@@ -46,18 +41,16 @@ public class JwtFilterClassForToken extends OncePerRequestFilter {
             }
 
         } catch (Exception e) {
-            logger.error("error seting context", e);
+            logger.error("Error setting context", e);
         }
         filterChain.doFilter(request, response);
     }
 
     private String getToken(HttpServletRequest request) {
-        String token_WithBerear = request.getHeader(SecurityConstant.HEADER_STRING);
-        if (StringUtils.hasText(token_WithBerear) && token_WithBerear.startsWith(SecurityConstant.TOKEN_PREFIX)) {
-            String splitToken = token_WithBerear.substring(7, token_WithBerear.length());
-            return splitToken;
+        String tokenWithBearer = request.getHeader(SecurityConstant.HEADER_STRING);
+        if (StringUtils.hasText(tokenWithBearer) && tokenWithBearer.startsWith(SecurityConstant.TOKEN_PREFIX)) {
+            return tokenWithBearer.substring(7);
         }
         return null;
     }
-
 }

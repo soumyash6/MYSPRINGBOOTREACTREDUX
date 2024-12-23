@@ -11,26 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CustomerUserDetailService implements UserDetailsService {
+
     @Autowired
-    private UserRepository userservice;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userservice.findByUsername(username);
-        if (user == null)
-            new UsernameNotFoundException("user not Found");
-        System.out.println("user: ");
-        System.out.println(user);
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
         return user;
     }
 
     @Transactional
     public User loadUserById(Long id) throws UsernameNotFoundException {
-        User user = userservice.findById(id).get();
-        if (user == null)
-            new UsernameNotFoundException("user not Found");
-
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return user;
     }
-
 }

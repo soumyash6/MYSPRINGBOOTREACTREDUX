@@ -48,7 +48,7 @@ public class ProjectController {
 	public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result,
 											  Principal principal) {
 
-		ResponseEntity<?> projectError = errorHandel.throughError(result);
+		ResponseEntity<?> projectError = errorHandel.mapValidationService(result);
 		if (projectError != null) {
 			return projectError;
 		}

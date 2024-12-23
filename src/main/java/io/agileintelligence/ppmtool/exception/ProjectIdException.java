@@ -5,20 +5,17 @@
  */
 package io.agileintelligence.ppmtool.exception;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * @author SOUMYA SAHOO
  */
-@Setter
-@Getter
-public class ProjectidResponceError {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class ProjectIdException extends RuntimeException {
 
-    String projectnotFound;
-
-    public ProjectidResponceError(String projectIdentifier) {
-        this.projectnotFound = projectIdentifier;
+    public ProjectIdException(String message) {
+        super(message);
     }
 
 }

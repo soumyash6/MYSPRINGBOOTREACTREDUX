@@ -13,9 +13,9 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class ProjectnotFoundExceptionResponse {
+public class ProjectNotFoundExceptionResponse {
 
-    public ProjectnotFoundExceptionResponse(String projectNotFound) {
+    public ProjectNotFoundExceptionResponse(String projectNotFound) {
         this.projectNotFound = projectNotFound;
     }
 
