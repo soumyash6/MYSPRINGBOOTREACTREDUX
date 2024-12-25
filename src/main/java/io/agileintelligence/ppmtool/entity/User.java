@@ -1,6 +1,7 @@
-package io.agileintelligence.ppmtool.domain;
+package io.agileintelligence.ppmtool.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,36 +17,44 @@ import java.util.List;
 
 @Entity
 @Data
+@Schema(description = "User entity")
 public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "my_user_id")
+    @Schema(description = "Unique identifier for the user", example = "1")
     private Long myUserId;
 
     @Email(message = "Username should be an email")
     @NotBlank(message = "Username should not be blank")
     @Column(unique = true)
+    @Schema(description = "Username of the user", example = "user@example.com")
     private String username;
 
     @NotBlank(message = "Full name should not be blank")
+    @Schema(description = "Full name of the user", example = "John Doe")
     private String fullName;
 
     @NotBlank(message = "Password should not be blank")
+    @Schema(description = "Password of the user", example = "password123")
     private String password;
 
     @Transient
+    @Schema(description = "Confirmation password of the user", example = "password123")
     private String confirmPassword;
 
     @Temporal(TemporalType.DATE)
+    @Schema(description = "Creation date of the user", example = "2023-01-01")
     private Date create_At;
 
     @Temporal(TemporalType.DATE)
+    @Schema(description = "Last update date of the user", example = "2023-06-01")
     private Date update_At;
 
-    // OneToMany with Project
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    @Schema(description = "List of projects associated with the user")
     private List<Project> projects = new ArrayList<>();
 
     @PrePersist
@@ -62,7 +71,6 @@ public class User implements UserDetails {
         super();
     }
 
-    // Implement getUsername method required by UserDetails
     @Override
     public String getUsername() {
         return this.username;
@@ -73,39 +81,37 @@ public class User implements UserDetails {
         return this.password;
     }
 
-
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN")); // Example of an admin role
+        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         return authorities;
     }
 
-    // Implement account status methods
     @Override
     @JsonIgnore
     public boolean isAccountNonExpired() {
-        return true; // Update based on your business logic
+        return true;
     }
 
     @Override
     @JsonIgnore
     public boolean isAccountNonLocked() {
-        return true; // Update based on your business logic
+        return true;
     }
 
     @Override
     @JsonIgnore
     public boolean isCredentialsNonExpired() {
-        return true; // Update based on your business logic
+        return true;
     }
 
     @Override
     @JsonIgnore
     public boolean isEnabled() {
-        return true; // Update based on your business logic, e.g., user activation
+        return true;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package io.agileintelligence.ppmtool.validatror;
 
-import io.agileintelligence.ppmtool.domain.User;
+import io.agileintelligence.ppmtool.entity.User;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
