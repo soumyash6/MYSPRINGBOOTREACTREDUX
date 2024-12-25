@@ -19,16 +19,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static io.agileintelligence.ppmtool.security.SecurityConstant.TOKEN_PREFIX;
 
 @RestController
 @RequestMapping("/api/users")
-//@CrossOrigin
+@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -52,6 +49,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PostMapping("/login")
+    @CrossOrigin
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
         if (errorMap != null) return errorMap;
@@ -71,6 +69,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PostMapping("/register")
+    @CrossOrigin
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
         userValidator.validate(user, result);
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
