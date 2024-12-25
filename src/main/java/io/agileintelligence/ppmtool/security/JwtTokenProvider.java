@@ -1,6 +1,6 @@
 package io.agileintelligence.ppmtool.security;
 
-import io.agileintelligence.ppmtool.domain.User;
+import io.agileintelligence.ppmtool.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

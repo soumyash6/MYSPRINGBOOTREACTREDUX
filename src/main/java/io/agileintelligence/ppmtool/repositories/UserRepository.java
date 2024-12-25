@@ -1,6 +1,6 @@
 package io.agileintelligence.ppmtool.repositories;
 
-import io.agileintelligence.ppmtool.domain.User;
+import io.agileintelligence.ppmtool.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

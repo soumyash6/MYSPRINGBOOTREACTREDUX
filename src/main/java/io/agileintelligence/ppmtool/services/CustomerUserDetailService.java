@@ -1,6 +1,6 @@
 package io.agileintelligence.ppmtool.services;
 
-import io.agileintelligence.ppmtool.domain.User;
+import io.agileintelligence.ppmtool.entity.User;
 import io.agileintelligence.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

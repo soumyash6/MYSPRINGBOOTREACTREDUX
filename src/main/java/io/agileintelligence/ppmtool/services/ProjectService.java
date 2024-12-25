@@ -2,9 +2,9 @@ package io.agileintelligence.ppmtool.services;
 
 import io.agileintelligence.ppmtool.exception.ProjectIdException;
 import io.agileintelligence.ppmtool.exception.ProjectNotFoundException;
-import io.agileintelligence.ppmtool.domain.Backlog;
-import io.agileintelligence.ppmtool.domain.Project;
-import io.agileintelligence.ppmtool.domain.User;
+import io.agileintelligence.ppmtool.entity.Backlog;
+import io.agileintelligence.ppmtool.entity.Project;
+import io.agileintelligence.ppmtool.entity.User;
 import io.agileintelligence.ppmtool.repositories.BacklogRepositoryInterface;
 import io.agileintelligence.ppmtool.repositories.ProjectRepository;
 import io.agileintelligence.ppmtool.repositories.UserRepository;

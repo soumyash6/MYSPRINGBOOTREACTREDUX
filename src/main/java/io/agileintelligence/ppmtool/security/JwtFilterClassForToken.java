@@ -1,6 +1,6 @@
 package io.agileintelligence.ppmtool.security;
 
-import io.agileintelligence.ppmtool.domain.User;
+import io.agileintelligence.ppmtool.entity.User;
 import io.agileintelligence.ppmtool.services.CustomerUserDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
